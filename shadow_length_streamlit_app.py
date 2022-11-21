@@ -1,6 +1,3 @@
-# %%
-
-# %%
 import math
 import seaborn as sns
 import pytz
@@ -38,10 +35,12 @@ def create_date_time_objects(start, end):
 
 
 def date_range(start, end, delta):
+    list = []
     curr = start
     while curr < end:
-        yield curr
+        list.append(curr)
         curr += delta
+    return list
 
 
 st.title('Annual Shadow Length Ratio Calculator')
@@ -70,7 +69,8 @@ if submitted:
     st.sidebar.header('Surveyed Location')
     st.sidebar.map(map_data, use_container_width=True)
     daterange = date_range(start, end, delta)
-    for result in stqdm((daterange), desc="Please wait. This will take several moments.", mininterval=1):
+    for result in stqdm(daterange,
+                        total=len(daterange), desc="Please wait. This will take several moments."):
         angle = get_altitude(lat, lon, result)
         shadow_length = 1 / math.tan(angle * math.pi / 180)
         month = result.month
@@ -110,5 +110,3 @@ if submitted:
     st.header('Results')
     st.pyplot(fig=plot)
     st.write('Each cell represnts the number of days within the corresponding month and hour that meet the shadow length criteria. For example, if the cell corresponding to "June" and "12" has a value of "30, then everyday that month at 12PM the sun was high enough to meet criteria. If months are missing in your graph, particularly in the winter time, then no hours during the day had short enough shadows.')
-
-# %%
