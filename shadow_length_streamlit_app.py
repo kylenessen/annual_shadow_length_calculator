@@ -15,12 +15,6 @@ from tzwhere import tzwhere
 from matplotlib import pyplot as plt
 from stqdm import stqdm
 
-from time import sleep
-from stqdm import stqdm
-
-for _ in stqdm(range(50), desc="This is a slow task", mininterval=1):
-    sleep(0.5)
-
 
 def get_location_info(address):
     geolocator = Nominatim(user_agent="GTA Lookup")
@@ -72,10 +66,11 @@ if submitted:
     delta = timedelta(minutes=10)
     output = []
 
-    st.write('Location found. Calculating shadow length ratio... Please wait. This will take several moments.')
+    st.write('Location found. Calculating shadow length ratio...')
     st.sidebar.header('Surveyed Location')
     st.sidebar.map(map_data, use_container_width=True)
-    for result in stqdm(date_range(start, end, delta), desc="This is a slow task", mininterval=1):
+    daterange = date_range(start, end, delta)
+    for result in stqdm((daterange), desc="Please wait. This will take several moments.", mininterval=1):
         angle = get_altitude(lat, lon, result)
         shadow_length = 1 / math.tan(angle * math.pi / 180)
         month = result.month
