@@ -13,6 +13,7 @@ from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 from tzwhere import tzwhere
 from matplotlib import pyplot as plt
+from tqdm import tqdm
 
 
 def get_location_info(address):
@@ -68,7 +69,7 @@ if submitted:
     st.write('Location found. Calculating shadow length ratio... Please wait. This will take several moments.')
     st.sidebar.header('Surveyed Location')
     st.sidebar.map(map_data, use_container_width=True)
-    for result in date_range(start, end, delta):
+    for result in tqdm(date_range(start, end, delta)):
         angle = get_altitude(lat, lon, result)
         shadow_length = 1 / math.tan(angle * math.pi / 180)
         month = result.month
@@ -108,3 +109,5 @@ if submitted:
     st.header('Results')
     st.pyplot(fig=plot)
     st.write('Each cell represnts the number of days within the corresponding month and hour that meet the shadow length criteria. For example, if the cell corresponding to "June" and "12" has a value of "30, then everyday that month at 12PM the sun was high enough to meet criteria. If months are missing in your graph, particularly in the winter time, then no hours during the day had short enough shadows.')
+
+# %%

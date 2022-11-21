@@ -10,3 +10,4 @@ seaborn==0.12.1
 Shapely==1.8.5.post1
 streamlit==1.15.0
 tzwhere==3.0.3
+tqdm==4.64.1
