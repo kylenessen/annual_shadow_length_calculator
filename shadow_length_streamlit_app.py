@@ -15,6 +15,12 @@ from tzwhere import tzwhere
 from matplotlib import pyplot as plt
 from stqdm import stqdm
 
+from time import sleep
+from stqdm import stqdm
+
+for _ in stqdm(range(50), desc="This is a slow task", mininterval=1):
+    sleep(0.5)
+
 
 def get_location_info(address):
     geolocator = Nominatim(user_agent="GTA Lookup")
