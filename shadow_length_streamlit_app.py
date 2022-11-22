@@ -44,8 +44,8 @@ def date_range(start, end, delta):
 
 
 st.header('Annual Shadow Length Ratio Calculator')
-st.write(''' Shadow length ratio refers to how long a shadow is relative to the object casting it. A value of `1.0` means the length of the shadow is equal to the height of the object. Smaller values (e.g. `0.5`) correspond to shorter shadows, and larger values (e.g. `5.0`) represent longer shadows.''')
-st.image('https://www.researchgate.net/publication/220541439/figure/fig7/AS:668676479012870@1536436304332/The-relationship-between-the-sun-elevation-e-object-height-H-and-shadow-length-L.png')
+st.write(''' Shadow length ratio refers to how long a shadow is relative to the object casting it. A value of `1.0` means the length of the shadow is equal to the height of the object. Smaller values (e.g. `0.5`) correspond to shorter shadows, and larger values (e.g. `2.0`) represent longer shadows.''')
+st.image('Shadow_length_ratio_figure.png')
 st.write('Excessive shadowing in your imagery can be detrimential to your data quality, depending on your application. This calculator is intended to help you plan for future projects where the angle of the sun is important.')
 st.subheader('Parameters')
 st.caption(
