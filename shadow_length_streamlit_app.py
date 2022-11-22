@@ -34,6 +34,10 @@ def create_date_time_objects(start, end):
     return start, end
 
 
+def format_date(date):
+    return (date.strftime('%b %-d, %Y'))
+
+
 def date_range(start, end, delta):
     list = []
     curr = start
@@ -44,12 +48,14 @@ def date_range(start, end, delta):
 
 
 st.header('Annual Shadow Length Ratio Calculator')
-st.write(''' Shadow length ratio refers to how long a shadow is relative to the object casting it. A value of `1.0` means the length of the shadow is equal to the height of the object. Smaller values (e.g. `0.5`) correspond to shorter shadows, and larger values (e.g. `2.0`) represent longer shadows.''')
+st.caption('''By Kyle Nessen\n
+November, 2023''')
+st.write(''' Shadow length ratio refers to how long a shadow is relative to the object casting it and is a helpful reference point when considering drone mapping missions. A value of `1.0` means the length of the shadow is equal to the object's height. Smaller values (e.g. `0.5`) correspond to shorter shadows, and larger values (e.g. `2.0`) represent longer shadows.''')
 st.image('Shadow_length_ratio_figure.png')
-st.write('Excessive shadowing in your imagery can be detrimential to your data quality, depending on your application. This calculator is intended to help you plan for future projects where the angle of the sun is important.')
+st.write('Considering shadow length ratio during the mission planning stages can be helpful, as excessive shadowing can degrade the quality of your imagery and final downstream products. This calculator is intended to help you plan for future projects where consistent lighting conditions are important to review.')
 st.subheader('Parameters')
 st.caption(
-    'Please enter your information below. Examples are provided, but please change as needed.')
+    'Please enter your project-specific information below. Examples are provided, but please change them as needed. This app will return all hours where the shadow length ratio is less than the maximum. Change the max value to something very large (e.g. `100`) to see all daylight hours.')
 with st.form(key='my form'):
     address = st.text_input("Address, City, or Region", "New Orleans, LA")
     start = st.date_input('Start Date', value=(datetime(2023, 1, 1)))
@@ -77,7 +83,7 @@ if submitted:
         st.caption('Calculating shadow length...')
         daterange = date_range(start, end, delta)
         for result in stqdm(daterange,
-                            total=len(daterange), desc="Please wait. This will take several moments."):
+                            total=len(daterange)):
             angle = get_altitude(lat, lon, result)
             shadow_length = 1 / math.tan(angle * math.pi / 180)
             month = result.month
@@ -118,7 +124,8 @@ if submitted:
             sns.heatmap(pivot, annot=True, linewidths=.5, ax=ax, cmap='rocket')
             ax.set(xlabel='', ylabel='Hour of day',
                    title='''Number of days where shadow length ratio is less than {shadow}
-                {address}'''.format(shadow=max_shadow_length, address=address))
+                {address}
+                {start} - {end}'''.format(shadow=max_shadow_length, address=address, start=format_date(start), end=format_date(end)))
             st.header('Results')
             st.pyplot(fig=plot)
-            st.write('Each cell represnts the number of days within the corresponding month and hour that meet the shadow length criteria. For example, if the cell corresponding to "June" and "12" has a value of "30, then everyday that month at 12PM the sun was high enough to meet criteria. If months are missing in your graph, particularly in the winter time, then no hours during the day had short enough shadows.')
+            st.caption('Each cell represents the number of days where the shadow length ratio was less than the maximum specified for any given hour of the day per month. For example, if the cell corresponding to `Jun` and `12` has a value of `30`, then every day that month at noon, the sun was high enough to meet the criteria. If months or hours are missing in your graph, then conditions were never met and are omitted (e.g. midnight in January)')
