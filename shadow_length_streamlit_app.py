@@ -121,7 +121,8 @@ if submitted:
             pivot = pivot.rename(columns=columns)
 
             plot, ax = plt.subplots(figsize=(8.5, 6))
-            sns.heatmap(pivot, annot=True, linewidths=.5, ax=ax, cmap='rocket')
+            sns.heatmap(pivot, annot=True, linewidths=.5,
+                        ax=ax, cmap='Blues_r')
             ax.set(xlabel='', ylabel='Hour of day',
                    title='''Number of days where shadow length ratio is less than {shadow}
                 {address}
